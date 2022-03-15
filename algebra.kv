@@ -1,0 +1,36 @@
+<MatrixAnalysis>:
+    matrix_input: [[a11, a12], [a21, a22]]
+
+    canvas.before:
+        Color:
+            rgb: 0.5, 0.8, 0.1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+    GridLayout:
+        cols: 2
+        size: root.width * 0.4, root.width * 0.4
+        pos: root.width * 0.3, root.height * 0.5
+        spacing: root.width * 0.15, root.width * 0.15
+
+        MatrixElementInput:
+            id: a11
+        MatrixElementInput:
+            id: a12
+        MatrixElementInput:
+            id: a21
+        MatrixElementInput:
+            id: a22
+
+    Button:
+        text: "det"
+        pos: root.width * 0.4, root.height * 0.3
+        on_release: root.calculate_det()
+
+    Label:
+        id: answer_label
+        font_size: 42
+        text: ""
+        pos: root.width * 0.4, root.height * 0.1
