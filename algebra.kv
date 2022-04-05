@@ -1,36 +1,136 @@
-<MatrixAnalysis>:
-    matrix_input: [[a11, a12], [a21, a22]]
+<MatrixScreen>:
+    matrix_dimension: 3
 
     canvas.before:
         Color:
-            rgb: 0.5, 0.8, 0.1
+            rgb: 1,1,1
         Rectangle:
             pos: self.pos
             size: self.size
 
+    Image:
+        source: "images/empty_matrix.png"
+        pos: 0, root.height * 0.4
+        size_hint: None, None
+        size: root.width * 0.8, root.width * 0.8
 
     GridLayout:
-        cols: 2
-        size: root.width * 0.4, root.width * 0.4
-        pos: root.width * 0.3, root.height * 0.5
-        spacing: root.width * 0.15, root.width * 0.15
+        id: matrix_grid
+        cols: root.matrix_dimension
+        size: root.width * 0.37, root.width * 0.37
+        size_hint: None, None
+        pos: root.width * 0.32, root.height * 0.51
+        spacing: root.width * 0.37 / (11*root.matrix_dimension - 1) # L/(11n-1)
 
-        MatrixElementInput:
-            id: a11
-        MatrixElementInput:
-            id: a12
-        MatrixElementInput:
-            id: a21
-        MatrixElementInput:
-            id: a22
+    Image:
+        source: "images/arrow.png"
+        pos: root.width * 0.345, root.height * 0.54 + root.width * 0.37
+        size: root.width * 0.32, root.height * 0.05
+        size_hint: None, None
+        allow_stretch: True
+        keep_ratio: False
+
+    Label:
+        text: str(root.matrix_dimension)
+        pos: root.width * 0.41, root.height * 0.55 + root.width * 0.37
+        size_hint: None, None
+        font_size: 35
+        color: 0,0,0,1
+
+    Button:
+        text: "+"
+        pos: root.width * 0.545, root.height * 0.593 + root.width * 0.37
+        size: root.width * 0.05, root.width * 0.05
+        size_hint: None, None
+        on_release: root.increase_dimension()
+
+    Button:
+        text: "-"
+        pos: root.width * 0.42, root.height * 0.593 + root.width * 0.37
+        size: root.width * 0.05, root.width * 0.05
+        size_hint: None, None
+        on_release: root.decrease_dimension()
 
     Button:
         text: "det"
-        pos: root.width * 0.4, root.height * 0.3
+        pos: root.width * 0.3, root.height * 0.3
+        size_hint: None, None
         on_release: root.calculate_det()
+
+    Button:
+        text: "жнф"
+        pos: root.width * 0.5, root.height * 0.3
+        size_hint: None, None
+        on_release: root.start_jordan()
 
     Label:
         id: answer_label
         font_size: 42
         text: ""
         pos: root.width * 0.4, root.height * 0.1
+        size_hint: None, None
+        color: 0,0,0,1
+
+    Button:
+        text: "< назад"
+        pos: 0, root.height - self.height
+        size: root.width * 0.15, root.height * 0.02
+        size_hint: None, None
+        on_release: root.manager.current = "menu"
+
+<MatrixElementInput>:
+    padding_y: (self.height - self.line_height)/2
+    write_tab: False
+
+
+<MenuScreen>:
+    Button:
+        text: "Анализ матрицы"
+        on_release: root.manager.current = "matrix"
+
+
+<JordanScreen>:
+
+    canvas.before:
+        Color:
+            rgb: 1,1,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Image:
+        source: "images/empty_matrix.png"
+        pos: 0, root.height * 0.62
+        size_hint: None, None
+        size: root.width * 0.8, root.width * 0.8
+
+    GridLayout:
+        id: matrix_grid
+        cols: len(root.matrix)
+        size: root.width * 0.37, root.width * 0.37
+        size_hint: None, None
+        pos: root.width * 0.32, root.height * 0.73
+        spacing: root.width * 0.37 / (11*len(root.matrix) - 1)
+
+    Label:
+        id: spectrum_label
+        font_size: 30
+        text: ""
+        pos: root.width * 0.4, root.height * 0.6
+        size_hint: None, None
+        color: 0,0,0,1
+
+    BoxLayout:
+        id: place_for_vk
+        orientation: 'vertical'
+        pos: root.width * 0.4, root.height * 0.4
+        size_hint: None, None
+        size: root.width * 0.4, root.height * 0.4
+
+
+    Button:
+        text: "< назад"
+        pos: 0, root.height - self.height
+        size: root.width * 0.15, root.height * 0.02
+        size_hint: None, None
+        on_release: root.manager.current = "matrix"
